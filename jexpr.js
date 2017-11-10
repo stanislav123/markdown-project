@@ -127,9 +127,9 @@ function insertIntoJExpr(jexpr,subJexpr,level) {
 
 /* JExpr -> String
    convert jexpr into html
-   note: the result is html-formatted string
-   
-   !!! ignore attributes, for now
+   notes: 
+    - the result is html-formatted string
+    - !!! ignore attributes, for now
 */
 
 if (runTests) {
@@ -160,11 +160,8 @@ function processJExprContent(content) {
   }
 }
 
-/* Attributes -> String
-*/
-function processAttributes(attr) {
-  
-}
+/* Attributes -> String */
+function processAttributes(attr) { }
 
 /* String -> String
    wrap html formatted string into html

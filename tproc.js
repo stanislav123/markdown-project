@@ -1,11 +1,12 @@
 /*
   # DATA DESCRIPTION
 
-  Line is a string that ends with \n
+  Line is a string, it doesn't include "\n".
 
-  TextBlock is a sequence of non-empty lines 
+  TextBlock is a string that can be split by a "\n" into 
+  a sequence of non-empty Lines (i.e. Lines that doesn't consist only of whitespace).
 
-  Title is a line that starts with a sequence of # characters
+  Title is a one-line TextBlock that matches the regex: ^\s*#.*$ 
 
   MDSection is an Array of type:
   - [Natural,Title,TextBlock,TextBlock,...],
@@ -23,14 +24,13 @@ let reTextBlock = /(?:(.+)(\n|$))+/g; // greedy, match TextBlock
 
 
 /* Line Array<Line> -> Void
-    populate accArr with lines leaving only
-    non-empty lines and null between sequences
-    of non-empty lines; start recording after
-    the first non-empty line 
+    populate accArr with Lines leaving only
+    non-empty Lines and null between TextBlocks; 
+    start recording after the first non-empty line 
 
    ASSUME:
    - data conforms to rules, i.e. the first non-empty 
-     line is a title, etc.
+     Line is a Title, etc.
 */
 function prepareTextBlocks(line,accArr) {
   if((match=line.match(reEmpty))!==null) {
@@ -44,9 +44,7 @@ function prepareTextBlocks(line,accArr) {
 }
 
 /* Array<null|String> -> Array<MDSection> 
-   match TextBlocks and differentiate
-   between titles and paragraphs, record result
-   to accArr
+   construct array of MDSections
 */
 function consMDSections(lineArr) {
   let accArr = [];
@@ -68,10 +66,7 @@ function consMDSections(lineArr) {
 }
 
 /* Array<String|null> -> Array<MDSection> 
-   match TextBlocks and differentiate
-   between titles and paragraphs, record result
-   to accArr
-*/
+   ...
 function consMDSections2(lineArr) {
   let accArr = [];
   let astr = lineArr.join('\n');
@@ -89,7 +84,10 @@ function consMDSections2(lineArr) {
   }
   return accArr;
 }
-
+assert.deepEqual(
+  consMDSections2(textArr),
+  [1,"Hello","This is a test\nand some line",2,"Chapter 1"]);
+*/
 
 // TESTS
 if(true) {
@@ -120,10 +118,6 @@ and some line
     [1,"Hello","This is a test\nand some line"],
     [2,"Chapter 1"],
   ]);
-
- assert.deepEqual(
-  consMDSections2(textArr),
-  [1,"Hello","This is a test\nand some line",2,"Chapter 1"]);
 
 }
 
