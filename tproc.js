@@ -1,10 +1,11 @@
 /*
   # DATA DESCRIPTION
 
-  Line is a string, it doesn't include "\n".
+  Line is a string.
 
-  TextBlock is a string that can be split by a "\n" into 
-  a sequence of non-empty Lines (i.e. Lines that doesn't consist only of whitespace).
+  TextBlock is a string that can be split by a (sequence of) character(s) that 
+  represent single "newline" into a sequence of non-empty Lines 
+  (i.e. Lines that doesn't consist only of whitespace).
 
   Title is a one-line TextBlock that matches the regex: ^\s*#.*$ 
 
@@ -13,7 +14,7 @@
   represents a section of a markdown document,
   with a nesting level as first element, 
   title as a second element followed by an arbitrary 
-  number of paragraphs.
+  number of TextBlocks.
 
 */
 const assert = require('assert');
