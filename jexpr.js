@@ -183,8 +183,6 @@ ${astr}
 </html>`;
 }
 
-exports.arrayToHTML = (docArr) => {
-  return genHTMLPage(jexprToHTML(composeDocument(docArr)));
-};
+exports.jexprToHTML = jexprToHTML;
 
 
