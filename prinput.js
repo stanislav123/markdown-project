@@ -1,45 +1,54 @@
 
 const JEXPR_MOD = require('./jexpr.js');
 
-function getLevel(arr,level) {
-  if(level===0) {
-    return arr;
-  } else {
-    return getLevel(arr[arr.length-1],level-1);
-  } 
-}
-
 /**
  * readline.Interface -> Void
  */
 function processInputLines(rl) {
-  let acc='';
-  let jexpr = [
+  
+  let acc = {
+    chunk:'',  
+    insertChunk: function() {
+      if(this.chunk.trim().length>0) {
+        this.insertJexpr(this.chunk.slice(0,-1),this.currentLevel); // level!
+        this.chunk='';
+      }
+    },
+    insertJexpr: function(jexpr,level) {
+      this.getPointer(level).push(jexpr);
+    },
+    getPointerAux: function(arr,level) {
+      if(level<=0) {
+        return arr;
+      } else {
+        return this.getPointerAux(arr[arr.length-1],level-1);
+      } 
+    },
+    getPointer: function(level) {
+      return this.getPointerAux(this.jexpr,level);
+    },
+    jexpr: [
       "MAIN",
       ["HEADER",["H1","Content"]], 
-    ]; 
-  let currentLevel = 0;
+    ], 
+    currentLevel: 0
+  };
+  
   rl.on('line', (line) => {
     let theMatch = line.match(/^(#+)(.*)/);
     if(theMatch) {
-      if(acc.trim().length>0) {
-        getLevel(jexpr,currentLevel).push(acc.slice(0,-1));
-        acc='';
-      }
-      currentLevel = theMatch[1].length;
-        getLevel(jexpr,currentLevel-1)
-          .push(
-            ["SECTION",
-              ["HEADER",["H1",`${theMatch[2]}`]]]);
+      acc.insertChunk();
+      acc.currentLevel = theMatch[1].length;
+      acc.insertJexpr(
+        ["SECTION",
+          ["HEADER",["H1",`${theMatch[2]}`]]],acc.currentLevel-1);
+      //debugger;
     } else {
-      acc+=line+"\n";
+      acc.chunk+=line+"\n";
     }
   }).on('close',()=>{
-    if(acc.trim().length>0) {
-      getLevel(jexpr,currentLevel).push(acc.slice(0,-1));
-      acc='';
-    }
-    console.log(JEXPR_MOD.jexprToHTML(jexpr));
+    acc.insertChunk();
+    console.log(JEXPR_MOD.jexprToHTML(acc.jexpr));
   });
 }
 
