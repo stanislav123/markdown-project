@@ -2,6 +2,28 @@
 const JEXPR_MOD = require('./jexpr.js');
 
 /**
+ * @param {String} astr
+ * @returns {String}
+ * wrap html formatted string into html
+ * document declaration
+ */
+function wrapToHTMLPage(astr) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+ p {
+   white-space:pre-line;
+ }
+</style>
+</head>
+<!-- the body -->
+${astr}
+</html>`;
+}
+
+/**
  * readline.Interface -> Void
  */
 function processInputLines(rl) {
@@ -48,7 +70,7 @@ function processInputLines(rl) {
     }
   }).on('close',()=>{
     acc.insertChunk();
-    console.log(JEXPR_MOD.jexprToHTML(acc.jexpr));
+    console.log(wrapToHTMLPage(JEXPR_MOD.jexprToHTML(acc.jexpr)));
   });
 }
 

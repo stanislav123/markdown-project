@@ -163,26 +163,6 @@ function processJExprContent(content) {
 /* Attributes -> String */
 function processAttributes(attr) { }
 
-/* String -> String
-   wrap html formatted string into html
-   document declaration
-*/
-function genHTMLPage(astr) {
-  return `<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
- p {
-   white-space:pre-line;
- }
-</style>
-</head>
-<!-- the body -->
-${astr}
-</html>`;
-}
-
 exports.jexprToHTML = jexprToHTML;
 
 
